@@ -44,14 +44,14 @@
 ## virtual DOM 활용한 리액트 렌더링 프로세스 
 
 ``` BASH 
-1. render phase 
+1. 'render' phase 
 
 	1.1 하나 하나의 컴포넌트를 호출해서 -> 각각의 React Element 를 계산 
 
 	1.2 각각의 React Element 를 모아서 -> Virtual DOM 을 만듦 
 		- VDOM 은 1) class 등의 요소는 갖고 있음 2) 다만, DOM API 같은 기능은 없음 3) '값' 으로 DOM 을 표현한 것이어서, 실제 DOM 을 수정하지도 않음. 
 
-2. commit phase
+2. 'commit' phase
 	2.1 VDOM 을 실제 DOM 에 반영함 
 	2.2 DOM 변경에 따라서 -> reflow, repaint 발생 
 
