@@ -1,5 +1,4 @@
 
-
 - position abolute 특징
 ``` bash
 1. 기본적으로 안전하게 사용하기 위해, top, left 를 모두 0 으로 두고 쓴다. 

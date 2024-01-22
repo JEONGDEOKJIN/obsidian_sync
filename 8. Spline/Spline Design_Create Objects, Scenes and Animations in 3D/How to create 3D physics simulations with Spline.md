@@ -2,11 +2,13 @@
 - 유튜브 튜토리얼
 	- https://www.youtube.com/watch?v=NdBpmhGvvW0
 
+<br>
 
 - 대략 이러한 느낌도 만들 수 있음. 
 ![](https://i.imgur.com/OatTcQN.png)
 
 
+<br>
 
 
 - variable 
@@ -14,6 +16,7 @@
 ![](https://i.imgur.com/4Md07PS.png)
 
 
+<br>
 
 - physics - damping 
 	- 물체가 천천히 떨어지게 할 수 있음. 
