@@ -1,5 +1,6 @@
 
 
+# 그리드의 기본형태 
 ## 기본 template-grid-column, row 설정
 
 - 코드펜 출처 : https://codepen.io/anotheryear-hm/pen/xxBYmWj
@@ -90,6 +91,12 @@
 
 ![](https://i.imgur.com/WvaETOy.png)
 
+
+<br>
+
+# 자동으로 채우기 
+
+- 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #3-자동으로채우기`
 
 <br>
 
@@ -337,3 +344,358 @@ grid-template-columns: repeat(auto-fill, minmax(100px, auto)); 로 설정하여,
 
 [[5. githubSync_gitBook/05_개발 언어/HTML&CSS/HTML5 + CSS3 웹 표준의 정석/요약#^9032fb| maxWidth 사용 ]]
 
+
+
+# 셀 간격 만들기 
+
+- 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #4-셀 간격 만들기`
+
+## [문제 상황] item 들 마다, 간격을 주고 싶을 때 
+- 코드펜 : https://codepen.io/anotheryear-hm/pen/abMYejL
+
+``` css
+.grid-container {
+	padding: 10px;
+	background-color: lightgray;
+	
+	display: grid;    
+
+	grid-template-columns: repeat(auto-fit, minmax(20px, auto));
+
+	grid-template-rows: repeat(3, minmax(100px, auto));
+
+	/*  상하 좌우 간격 ✅ */
+	gap : 20px
+
+	/*  상하 간격 */
+	row-gap : 20px
+
+	/*  좌우 간격 */
+	column-gap : 20px
+
+	 /* 예전 버전 */
+	 grid-gap : 20px 
+}
+
+.grid-item { 
+	padding: 10px;
+	border: 3px solid rgb(50, 50, 40);
+	color: white;
+	background: #ff6937;
+}
+```
+
+![](https://i.imgur.com/mhhFFq3.png)
+
+
+<br>
+
+# 그리드 자동 정의 ⭐⭐⭐ 
+
+- 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #5-그리드자동정의`
+
+## [문제상황] grid-template-rows 를 쓰면, 몇 줄을 써야 하는지를, 일일이 수동으로 기입해줘야 함. 서버 데이터를 받아오면, 그것에 대응해서 자동으로 rows 가 생겼으면 함. 
+
+
+- grid-template-rows 를 사용해서, 구현하는 경우 
+``` css 
+grid-template-rows: repeat(3, minmax(100px, auto));
+/* 몇개의 줄 까지, 100px - auto 를 적요할 것 인지, '수동으로 기재' 해야 함
+	문제는, '⭐⭐데이터가 추가되는 것(grid item 이 추가되는 것)⭐⭐' 에 '자동으로 대응하지 못 한다' 라는 것 ⭐⭐⭐ 
+*/
+```
+
+![](https://i.imgur.com/fDeo33D.png)
+
+
+
+
+- grid-auto-rows 를 사용해서 구현하는 경우 
+``` css 
+.grid-container {
+	padding: 10px;
+	background-color: lightgray;
+
+	display: grid;
+
+	grid-template-columns: repeat(auto-fit, minmax(210px, auto));
+
+	/* 수동으로 셋팅하는 경우 */
+	/* grid-template-rows: repeat(3, minmax(100px, auto)); */
+
+	/* item에 반응해서, grid-item에 있는 개수대로 맞춰서 셋팅해주기 ⭐⭐⭐⭐⭐ */
+	grid-auto-rows: minmax(100px, auto);
+}
+
+.grid-item {
+	padding: 10px;
+	border: 3px solid rgb(50, 50, 40);
+	color: white;
+	background: #ff6937;
+}
+```
+
+![](https://i.imgur.com/YwugrG1.png)
+
+
+- grid-auto-columns 의 경우 
+( 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #6 - 각 셀의 영역 지정` )
+![](https://i.imgur.com/0oFHpzT.png)
+
+
+![](https://i.imgur.com/UNjOHTA.png)
+
+
+
+
+
+
+
+<br>
+
+# 각 셀의 영역 지정 
+- 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #6-각 셀 영역지정`
+
+``` css 
+/* [포인트]
+	- grid item 에 지정함! (container 가 아님!)
+*/
+
+/* 1번 라인부터 3번 라인까지 : 한번에 지정*/
+	.item:nth-child(1){
+		grid-column : 1/3 ; 
+	}
+	
+/* 1번 라인부터 3번 라인까지 : 나눠서 지정*/
+	.item {
+		grid-column-start : 1;
+		grid-column-end : 3}
+	}
+
+```
+
+![](https://i.imgur.com/Vx2tRhA.png)
+
+
+- 예시 코드 
+``` css 
+        .grid-container {
+            padding: 10px;
+            background-color: lightgray;
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(210px, auto));
+
+            /* item에 반응해서, 있는 개수대로 맞춰서 셋팅해주기 */
+            grid-auto-rows: minmax(100px, auto);
+        }
+
+        /* 각 grid-item 을 셋팅하고, 남은애들은, 자동적으로, 남은 공간을 배분 */
+        /* 일반형으로 표현 */
+        .grid-item:nth-child(2) {
+            grid-column-start: 2;
+            grid-column-end: 3;
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+
+        /* 축약형으로 표현 */
+        .grid-item:nth-child(2) {
+            grid-column: 3/5;
+            grid-row: 1/5;
+        }
+
+        /* 이때, firefox 개발자 도구를 켜서, 정확하게, 라인을 지정해줄 수 있음.  */
+
+        /* span 사용 */
+        .grid-item:nth-child(3) {
+            grid-column: 3/ span 2;
+            /* grid-column: 3/5; 이거랑 동일! 2개까지 늘려주세요! 라는 의미 */
+
+            grid-row: 1/5;
+        }
+
+        .grid-item {
+            padding: 10px;
+            border: 3px solid rgb(50, 50, 40);
+            color: white;
+            background: #ff6937;
+        }
+```
+
+
+<br>
+
+### 겹치게 하고 싶을 때 
+``` bash 
+d 그리드 아이템의 경우 
+grid-column & grid-rows 를 설정 
+👉 d 가 제자리에 버티고 있게 함 
+
+c 그리드 아이템에도, grid-column 과 grid-rows 를 줘서 겹치게 함 
+```
+![](https://i.imgur.com/5aaAlHT.png)
+
+
+
+<br>
+
+
+# 영역 이름 사용하기 ⭐⭐⭐
+
+- 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #7-영역이름사용하기`
+
+## [문제상황] 영역 지정 방식으로써, grid-row: 1/5; 의 한계 
+``` bash 
+'해당 영역의 네이밍'을 더해줌으로써, 어떤 역할을 하는지 알 수 있게 함 
+'영역 지정' 의 면에서, 기능은 동일함. 
+```
+
+- 예시 (https://studiomeal.com/archives/533)
+![](https://i.imgur.com/FTu3R3k.png)
+
+
+<br>
+
+- 문법 포인트 
+``` bash 
+띄어쓰기는 최소 한칸만 하면 됨 
+마침표 대신 NONE 으로 써도 빈칸이 됨
+인터넷 익스플로러에서는 지원하지 않음.
+```
+
+<br>
+
+- 예시 코드 
+``` html 
+<head>
+	<style>
+		.grid-container {
+			padding: 10px;
+			background-color: lightgray;
+			display: grid;
+			gap: 1rem;
+	
+			grid-template-columns: 1fr 3fr 1fr;
+	
+			grid-template-areas: 
+			
+			'......     header  header'
+				/* ..... 으로 하면, 해당 영역이 빈칸이 됨 | ..... 대신 none 혹은 . 하나로도 가능 ⭐⭐ */
+			'sidebar-a  main    sidebar-b'
+			'footer     footer  footer'
+	
+		}
+	
+		.grid-item {
+			padding: 10px;
+			border: 3px solid rgb(50, 50, 40);
+			color: white;
+			background: #ff6937;
+		}
+	
+		/* 각 클래스가, grid-area 에서 이거다! 라고 연결(매핑) 시켜주기
+			각 클래스에 연결시켜준 grid-area 의 value 로 영역을 지정해주면 됨 ⭐⭐⭐ */
+		.header{grid-area : header;}
+		.sidebar-a {grid-area: sidebar-a;}
+		.sidebar-b {grid-area: sidebar-b;}
+		.main {grid-area: main;}
+		.footer {grid-area: footer;}
+	</style>
+</head>
+<body>
+	<div class="grid-container">
+		<div class="header grid-item"> Header </div>
+		<div class="sidebar-a grid-item"> Sidebar A </div>
+		<div class="sidebar-b grid-item"> Sidebar B </div>
+		<div class="main grid-item"> 
+			[Main] Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus enim, expedita placeat rem officiis accusamus molestiae nihil dolorum. Ipsam distinctio laudantium consequatur quae aspernatur nostrum impedit maiores magni architecto labore? 
+		</div>
+			<div class="footer grid-item"> Footer </div>
+	</div>
+</body>
+```
+
+
+
+![](https://i.imgur.com/6u1sULr.png)
+
+
+<br>
+
+
+# 자동배치 알고리즘 ⭐⭐⭐⭐⭐ 
+
+- 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #8-자동배치알고리즘`
+
+- 문법 포인트 
+``` bash 
+- 컨테이너에 적용하는 속성 
+
+- 어디에서 시작이 되건, 셀 3칸을 점유하라 
+item : nth-child(2) {grid-column : auto / span 3}
+	- auto : 어디에서 시작하건! 그 지점에서 부터 뭔가를 해라 
+	- span3 : 3칸을 점유해라 
+
+- dense 를 사용하면 -> 남아있는 빈칸을 채우게 됨. 
+
+- dense 알고리즘으로, 랜덤한 이미지로 격자가 채워지는 느낌들 ⭐⭐⭐
+```
+
+![](https://i.imgur.com/LR5qXx8.png)
+
+
+<br>
+
+- 예제 코드 (https://studiomeal.com/archives/533)
+```css
+.container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(25%, auto));
+	grid-template-rows: repeat(5, minmax(50px,auto));
+	grid-auto-flow: dense;
+}
+item:nth-child(2) { grid-column: auto / span 3; }
+item:nth-child(5) { grid-column: auto / span 3; }
+item:nth-child(7) { grid-column: auto / span 2; }
+```
+
+
+<br>
+
+# 정렬하기 
+- 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #9-정렬하기`
+- 문법 포인트 
+``` bash 
+stretch : 컨테이너 기본 높이가 있으면 -> content 가 알아서 늘어난다. 
+
+포인트는 컨테이너가 높이가 있는 상태에서 받쳐줘야 -> content 가 늘어날 수 있는 영역이 있다. 
+
+컨테이너에 적용할 수도, 개별 아이템에 적용할 수도 
+```
+
+
+<br>
+
+# 순서 정하기 
+
+- 수업 출처 : `CSS Flex와 Grid 제대로 익히기 > 섹션4 > Grid 핵심정리 #10-순서정하기`
+- 포인트 
+``` 
+html 구조가 아니라, 
+시각적인 순서를 바꾸는 것
+order 명령어를 사용 ⭐⭐⭐⭐⭐ 
+
+z-index 를 하면, 수직적 순서
+
+position absolute 를 안 해줘도 됨! 
+```
