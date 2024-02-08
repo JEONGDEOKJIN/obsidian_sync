@@ -7,7 +7,7 @@
 ## 문제 상황 ⭐⭐⭐ 
 
 1. 클라이언트 컴포넌트에서 서버 컴포넌트를 사용해야 하는 경우 
-- 옵시디언 출처 : [[231103_client component by 공식문서 ⭐⭐⭐#^2d03d4]]
+- 옵시디언 출처 : [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_11월(기업협약프로젝트)/231103_client component by 공식문서 ⭐⭐⭐#^2d03d4]]
 - 공식 문서 출처 : https://nextjs.org/docs/app/building-your-application/rendering/client-components#how-are-client-components-rendered
 ``` bash
 - you may want to 'reduce the client bundle size', 'fetch data on the server', or '⭐⭐ use an API that is only available on the server' ⭐⭐ 

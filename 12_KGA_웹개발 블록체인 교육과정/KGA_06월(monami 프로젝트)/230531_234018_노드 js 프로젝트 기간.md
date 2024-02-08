@@ -217,7 +217,7 @@
 
 
 - sequelize, mvc, token 관련 총집합해서 회원가입, 로그인, 글 작성, 수정, 삭제 함
-	- [[202305220927_월요일_node.js_sequelize]]
+	- [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_05월(node.js)/KGA_13주차(5월4째주_node.js,sequelize,게시판,socketio)/202305220927_월요일_node.js_sequelize]]
 
 
 - 지금까지 배운 것 활용해서 게시판 토이 프로젝트_1일차
@@ -233,11 +233,11 @@
 
 
 - socket.io - 채팅 기능 만들기 
-	- [[202305250919_목요일_node.js_socket.io_]]
+	- [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_05월(node.js)/KGA_13주차(5월4째주_node.js,sequelize,게시판,socketio)/202305250919_목요일_node.js_socket.io_]]
 
 
 - 게시판 만들기 
-	- [[202305260929_금요일_node.js_socket_io_게시판만들기]]
+	- [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_05월(node.js)/KGA_13주차(5월4째주_node.js,sequelize,게시판,socketio)/202305260929_금요일_node.js_socket_io_게시판만들기]]
 	- CRUD 중에서, '업데이트' 를 아직 못 함. 
 	- 다만, '템플릿 학습' 에 대해서 깨달은 바가 있음. 
 	- 지금 느끼는 건, 성과 정도를 파악하고 싶어. 한눈에. 

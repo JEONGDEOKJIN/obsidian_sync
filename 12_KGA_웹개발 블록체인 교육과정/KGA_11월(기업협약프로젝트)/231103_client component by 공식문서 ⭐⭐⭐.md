@@ -131,9 +131,9 @@
 
 
 - 관련 개념 
-	- [[231103_DOM]]
+	- [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_11월(기업협약프로젝트)/231103_DOM]]
 	- [[231103_SSG 정적렌더링]]
-	- [[231103_hydration_event listener 가 dom 에 붙게 하는 과정 ⭐⭐⭐⭐⭐⭐]]
+	- [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_11월(기업협약프로젝트)/231103_hydration_event listener 가 dom 에 붙게 하는 과정 ⭐⭐⭐⭐⭐⭐]]
 
 
 
@@ -173,7 +173,7 @@ Subsequent Navigations 의 경우, server-rendered HTML 없이 클라이언트�
 	- 더 정확한 것은 'Server and Client Composition Patterns'(https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns) 참고 
 
 - 관련 개념 
-	- [[231103_Server and Client Composition Patterns]]
+	- [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_11월(기업협약프로젝트)/231103_Server and Client Composition Patterns]]
 
 
 

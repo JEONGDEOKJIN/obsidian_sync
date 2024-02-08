@@ -23,14 +23,14 @@
 
 ## 1. 프론트 
 - npx create-react-app front
-[[231013_토이프로젝트_피카츄 응용해서 상품 페이지 ⭐⭐⭐⭐⭐#^4b04b6]]
+[[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_10월(blockchain, next, ts, tailwind)/231013_토이프로젝트_피카츄 응용해서 상품 페이지 ⭐⭐⭐⭐⭐#^4b04b6]]
 
 
 
 
 
 ## 2. 백엔드 
-[[231013_토이프로젝트_피카츄 응용해서 상품 페이지 ⭐⭐⭐⭐⭐#^1a57ab]]
+[[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_10월(blockchain, next, ts, tailwind)/231013_토이프로젝트_피카츄 응용해서 상품 페이지 ⭐⭐⭐⭐⭐#^1a57ab]]
 
 - 설치 리스트 
 ``` bash 
