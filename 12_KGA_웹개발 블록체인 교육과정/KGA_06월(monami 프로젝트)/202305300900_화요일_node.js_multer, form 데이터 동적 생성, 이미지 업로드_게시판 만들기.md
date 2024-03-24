@@ -212,7 +212,7 @@
 	- [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_5월/KGA_12주차 (5월 3째주_node.js_다시, 새롭게, 이제, 시작하자.)/202305180857_목요일_node.js_SQL 문법_board 테이블과, userList 테이블 연결해서, 특정 userID 를 가진 사람의 게시글을 모두 가져오기]]
 
 - squelize 모듈 적용해서, 쿼리문 사용하고, 테이블 join 하고, foreign key 넣는 등등 
-	- [[5. githubSync_gitBook/12_KGA_웹개발 블록체인 교육과정/KGA_5월/KGA_12주차 (5월 3째주_node.js_다시, 새롭게, 이제, 시작하자.)/202305190859_금요일_node.js_ 1) sequelize 로 특정 id 를 가진 user 가 기록한 포스팅 게시글 모아 보기 2) foreign key, 테이블 join]]
+	- [[202305190859_금요일_node.js_ 1_ sequelize 로 특정 id 를 가진 user 가 기록한 포스팅 게시글 모아 보기 2_ foreign key, 테이블 join]]
 	- foreign key 설정을 아직 못 함 😥😥😥 
 
 
