@@ -1,0 +1,114 @@
+
+## 240721 
+### [보완하고 싶은 기능] 약관 동의할 때, `확인 상태` 가 '페이지별로 공유' 되었으면 해. 그냥, 확인 버튼 누르면, 화면 이동만 되게 하자.  
+- 현재, URL 쿼리 스트링을 통해서 진행하고 있는데, 이걸, '전역 상태' 로 진행할 수도 있잖아. 
+- 다만, 지금은, 이게, 추가 리소스가 들어가니까, 여기에서 멈추자 
+
+- 이게 agreement 페이지에 있는거고 
+```jsx
+  URL 을 바라보고 있다가, terms, privacy가 체크되는 경우, setTermsChecked 변경시키기
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const termsChecked = params.get("terms") === "y";
+    const privacyChecked = params.get("privacy") === "y";
+    const marketingChecked = params.get("marketing") === "y";
+
+    setTermsChecked((prev) => {
+      return {
+        ...prev,
+        terms: termsChecked,
+        privacy: privacyChecked,
+        marketing: marketingChecked,
+      };
+    });
+  }, [window.location.search]);
+```
+
+- 이게 세부 약관 들어갔을 때, 확인 눌렀을 때, 있는 거고 
+``` jsx 
+import { useState } from "react";
+import style from "./marketing.module.css";
+import { useHistory } from "react-router";
+import { IonButton, IonPage } from "@ionic/react";
+
+export const AgreementMarketingPage: React.FC = () => {
+  const history = useHistory();
+  const [query, setQuery] = useState(new URLSearchParams(location.search));
+
+  const updateQueryString = (key: string, value: string) => {
+    query.set(key, value); // [❓❓] 이거 query 는 어디에서 나온거지? URLSearchParams 의 속성인가?
+    setQuery(new URLSearchParams(query)); // [❓❓] 상태 업데이트를 위해 다시 설정 | 왜?
+  };
+
+  const handleOnClick = () => {
+    updateQueryString("marketing", "y");
+    history.push(`/register/agreement?${query.toString()}`); // [❓❓] 왜 query 가 들어갈 때는, toString() 이렇게 들어가지?
+  };
+
+  return (
+    <IonPage>
+      <section className={style.section_marketing_wrap}>
+        <ol className={style.marketing_wrap}>현재 내용 없음</ol>
+      </section>
+      <section className={style.button_wrap}>
+        <IonButton onClick={handleOnClick}>확인</IonButton>
+      </section>
+    </IonPage>
+  );
+};
+
+```
+
+
+### 그런데, 이때의 문제는, 마케팅 동의, 약관 동의 페이지를 갔다가, 본래의 agreement 페이지로 왔을 때, 체크 된게 다시 사라지는 문제가 발생 -> 왜냐면, agreement 페이지의 상태가 사라지기 때문에. -> 따라서 RECOIL 로 전역 상태 관리를 하자. 
+
+
+```jsx
+// 1. recoil 설치 
+
+// 2. main.tsx 에서 recoil provider 넣어주기 
+
+// 3. 디렉토리 위치 ⭐⭐⭐
+lib > atoms 에 index.ts 설정해주기 
+
+// 4. 각 페이지에서 atom 가져오고, 설정해서 사용하기
+
+```
+
+### 그 결과, Agreement 페이지에서, 각 항목의 상태를 URL 쿼리로 설정하고, 왔다 갔다 하는 것 보다, 전역 상태로 하는게 코드가 적고, 깔끔하게 움직여진다. 쿼리 업데이트하는 코드가 굳이 필요없다. 
+
+``` JSX
+import style from "./marketing.module.css";
+import { useHistory } from "react-router";
+import { IonButton, IonPage } from "@ionic/react";
+import { useRecoilState } from "recoil";
+import { termsState } from "../../../../../lib/atoms";
+
+
+export const AgreementMarketingPage: React.FC = () => {
+  const history = useHistory();
+  const [termsChecked, setTermsChecked] = useRecoilState(termsState);
+
+  const handleOnClick = () => {
+    setTermsChecked({
+      ...termsChecked, // 기존값 유지 
+      marketing: true,  // '선택 광고성 정보 수신 동의' 변경
+      email: true,  // 'email' 변경
+      sms: true,  // 'SMS' 변경
+    });
+    history.push(`/register/agreement`); 
+  };
+
+  return (
+    <IonPage>
+      <section className={style.section_marketing_wrap}>
+        <ol className={style.marketing_wrap}>현재 내용 없음</ol>
+      </section>
+      <section className={style.button_wrap}>
+        <IonButton onClick={handleOnClick}>확인</IonButton>
+      </section>
+    </IonPage>
+  );
+};
+
+```
