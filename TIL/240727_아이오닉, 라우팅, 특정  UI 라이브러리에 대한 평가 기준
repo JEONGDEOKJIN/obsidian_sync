@@ -1,0 +1,134 @@
+
+## 240727 
+
+### useLocation 으로 URL 값을 가져오고, noPages배열에 근거해서, shotabs 을 분기처리 했음에도, noShowTabs 페이지에 넣은 값들이 보이는 이유 | 하단 네비게이션 tab 을 안 보여주고 싶음. 안 보이게 하는 로직 
+
+- 내가 잘 몰랐던 것 
+``` bash 
+1. useLocation 을 App.tsx 의 최상단에 쓰면 안 된다는 걸 몰랐다. 아직도 왜 그런건지는 잘 모르겠다. 
+
+2. 아이오닉에 대한 불신이 있는 것 같다. shadow root 라는 것 때문에, 어떤 기능이 안 될 것 만 같다. 사실, 단순히, tab 컴포넌트를 on/off 하는 것 이고, 분기처리 하면 되는 것 인데, 아이오닉에 대한 어떤 불신 떄문에 이 생각을 못 했던 것 같다. 
+
+3. 그러면, 그 불신은 어디에서 왔을까. 
+    1) 수정하기 힘들다는 거? 
+    2) tailwind 가 아니라는거? 
+    3) css 모듈 방식 이라는거? 
+    4) 최근 트렌드가 아니라는거? 그거와는 조금 거리가 있다는거? 
+    
+    - 그런데, 이것들이 정확한 이유가 될 수 있을까? 
+    - 아이오닉 이라는 ui 라이브러리를 평가하는데에, 정확한 포인트를 이야기 하려면, 어떤 부분을 이야기 해야 할까...
+
+```
+
+
+- 전체 코드 
+``` jsx 
+import React from "react";
+import { Redirect, Route } from "react-router-dom";
+import { IonRouterOutlet, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from "@ionic/react";
+import { boatSharp, chatbox, home, menu } from "ionicons/icons";
+
+import AuthLoginPage from "@/src/pages/Auth/Login";
+import AuthRegisterPage from "@/src/pages/Auth/Register";
+import FindEmailPage from "@/src/pages/Find/Email";
+import FindPasswordPage from "@/src/pages/Find/Password";
+import AgreementPage from "@/src/pages/Auth/Register/Agreement";
+import { AgreementTermPage } from "@/src/pages/Auth/Register/Agreement/terms";
+import { AgreementPrivacyPage } from "@/src/pages/Auth/Register/Agreement/privacy";
+import { AgreementMarketingPage } from "@/src/pages/Auth/Register/Agreement/marketing";
+import MainPage from "@/src/pages/Main/Home";
+import BoardDetailPage from "@/src/pages/Board/detail";
+import BoardPage from "@/src/pages/Board";
+import ChannelListPage from "@/src/pages/Chat/ChannelListPage";
+import ChannelPage from "@/src/pages/Chat/ChannelPage";
+import AllMenuPage from "@/src/pages/AllMenu";
+import TESTCALENDAR from "@/src/pages/Board/testCalender/index";
+import ChatMessageSearchPage from "@/src/pages/Chat/ChatMessageSearchPage";
+import ChannelSettingPage from "@/src/pages/Chat/ChannelSettingPage";
+
+import { useLocation } from "react-router";
+
+{
+  /* [용례]
+        - 하단 네비게이션바(tab) 을 보여주고 싶지 않은 페이지는 noTabsPages 에 추가한다. 
+        - 현재 URL 에서(useLocation 으로 파악) noTabsPages 에 해당하는 페이지 인지 확인 -> showTabs 변수 업데이트 
+        - showTabs 가 true 이면 IonTabs 컴포넌트를 포함하여 렌더링 한다. 
+            - 이때, IonRouterOutlet 안에, login, register 처럼, tab이 필요없는 페이지가 포함된다고 해도, 원하는대로(EX_/login 에서는 탭이 안 보임) 렌더링 된다. 
+            - 왜냐면, 실제로 URL 에 따라 분기처리되는 곳은   const showTabs = !noTabsPages.includes(location.pathname) 이 부분이기 때문에, 
+                - 그래서, 설령, showTabs true 분기처리 부분의 IonRouterOutlet 안에 login 이 들어가도, login 페이지에서 tabs 이 보이지 않는다.
+    */
+}
+
+const AppRouter = () => {
+  const location = useLocation();
+  const noTabsPages = [
+    "/",
+    "/login",
+    "/register",
+    "/register/agreement",
+    "/register/agreement/terms",
+    "/register/agreement/privacy",
+    "/register/agreement/marketing",
+    "/find/email",
+    "/find/password",
+  ];
+
+  const showTabs = !noTabsPages.includes(location.pathname);
+
+  return (
+    <>
+      {showTabs ? (
+        // 하단 네비게이션바(탭) 이 보이는 곳
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/main" component={MainPage} exact={true} />
+            <Route path="/chat" component={ChannelListPage} exact={true} />
+            <Route path="/chat/:channelUrl" component={ChannelPage} exact={true} />
+            <Route path="/chat/:channelUrl/search" component={ChatMessageSearchPage} exact={true} />
+            <Route path="/chat/:channelUrl/settings" component={ChannelSettingPage} exact={true} />
+            <Route path="/board" component={BoardPage} exact={true} />
+            <Route path="/allMenu" component={AllMenuPage} exact={true} />
+            <Route path="/board/detail" component={BoardDetailPage} exact={true} />
+            <Route path="/testCalendar" component={TESTCALENDAR} />
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="home" href="/main">
+              <IonIcon icon={home} />
+              <IonLabel>Home</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="board" href="/board">
+              <IonIcon icon={boatSharp} />
+              <IonLabel>게시판</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="chat" href="/chat">
+              <IonIcon icon={chatbox} />
+              <IonLabel>채팅</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="allMenu" href="/allMenu">
+              <IonIcon icon={menu} />
+              <IonLabel>전체 메뉴</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      ) : (
+        // 하단 네비게이션바(탭) 이 '안 보이는 곳'
+        <IonRouterOutlet>
+          <Route exact path="/" render={() => <Redirect to="/login" />} />
+          <Route path="/login" component={AuthLoginPage} exact={true} />
+          <Route path="/register" component={AuthRegisterPage} exact={true} />
+          <Route path="/register/agreement" component={AgreementPage} exact={true} />
+          <Route path="/register/agreement/terms" component={AgreementTermPage} exact={true} />
+          <Route path="/register/agreement/privacy" component={AgreementPrivacyPage} exact={true} />
+          <Route path="/register/agreement/marketing" component={AgreementMarketingPage} exact={true} />
+          <Route path="/find/email" component={FindEmailPage} exact={true} />
+          <Route path="/find/password" component={FindPasswordPage} exact={true} />
+        </IonRouterOutlet>
+      )}
+    </>
+  );
+};
+
+export default AppRouter;
+
+
+```
