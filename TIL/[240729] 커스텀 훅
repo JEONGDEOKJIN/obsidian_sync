@@ -1,0 +1,77 @@
+```JSX
+// useAuthCode.js
+import { useState } from "react";
+import AuthService from "@/src/services/AuthService";
+
+const useAuthCode = () => {
+  const [emailCredential, setEmailCredential] = useState<string>("");
+  const [authCodeErrorMessage, setAuthCodeErrorMessage] = useState<string>("");
+  const [isAuthCodeValid, setIsAuthCodeValid] = useState<boolean>(false);
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
+  const [alertHeader, setAlertHeader] = useState<string>("");
+  const [alertMessage, setAlertMessage] = useState<string>("");
+
+  const sendAuthCode = async (email: string) => {
+    if (!email) {
+      setIsAlertOpen(true);
+      setAlertHeader("인증");
+      setAlertMessage("이메일을 입력해주세요");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setIsAlertOpen(true);
+      setAlertHeader("인증 메일");
+      setAlertMessage("올바르지 않는 메일주소 입니다.");
+      return;
+    }
+
+    try {
+      const response = await AuthService.postUserRegisterEmail({ email });
+      const { credential } = response.data.data;
+
+      if (credential) {
+        setEmailCredential(credential);
+        setIsAlertOpen(true);
+        setAlertHeader("인증메일");
+        setAlertMessage("인증코드를 메일로 보냈습니다.");
+      }
+    } catch (e: any) {
+      setIsAlertOpen(true);
+      setAlertHeader("인증메일");
+      setAlertMessage(e.response.data.message);
+    }
+  };
+
+  const checkAuthCode = async (authCode: string) => {
+    try {
+      const response = await AuthService.postUserRegisterEmailResult({
+        auth_code: authCode,
+        credential: emailCredential,
+      });
+
+      if (response.data.code === 200) {
+        const { credential2 } = response.data.data;
+        setAuthCodeValid(true);
+        return { credential2, isAuthCodeValid: true };
+      }
+    } catch (e: any) {
+      setAuthCodeErrorMessage(e.response.data.message);
+    }
+  };
+
+  return {
+    sendAuthCode,
+    checkAuthCode,
+    authCodeErrorMessage,
+    isAuthCodeValid,
+    isAlertOpen,
+    alertHeader,
+    alertMessage,
+    setIsAlertOpen,
+  };
+};
+
+export default useAuthCode;
+
+```
