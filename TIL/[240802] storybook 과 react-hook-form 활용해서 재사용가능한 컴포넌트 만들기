@@ -1,0 +1,64 @@
+
+``` JSX 
+import type { Meta, StoryObj } from "@storybook/react";
+
+import InputTextareaComponent from "./InputTextareaComponent";
+import { FormProvider, useForm } from "react-hook-form";
+import RHForm from "@/src/components/RHForm";
+import * as z from "zod";
+import { DefaultValue } from "recoil";
+
+const meta = {
+  component: InputTextareaComponent,
+  tags: ["autodocs"],
+} satisfies Meta<typeof InputTextareaComponent>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const 기본적인_사용법: Story = {
+  args: {
+    label: "이름",
+    placeholder: "text area에 적어주세요.",
+    name: "textArea",
+  },
+  // decorators 를 이곳에 위치 -> 개별적인 story 에 대응 가능
+  decorators: [
+    (Story) => {
+      const schema = z.object({
+        test: z.string().min(1, "테스트는 필수값 입니다."),
+      });
+
+      const defaultValues = {
+        test: "1",
+      };
+
+      return (
+        <RHForm id="textAreaTest" schema={schema} defaultValues={defaultValues}>
+          <Story />
+          <button type="submit">서브밋</button>
+
+          <button type="reset">리셋</button>
+          {/* 리셋은 반드시 테스트 할 것 */}
+        </RHForm>
+
+        /* 
+            <FormProvider {...form}>
+                <Story />
+            </FormProvider>
+            이게, 기존의 코드 
+            RHForm 컴포넌트가 하는 역할은, 이 FormProvider 를 감싸는 역할을 한다.
+            그리고, 
+                const form = useForm({
+                mode: "onChange",
+                defaultValues: {},
+                이게, 그 안으로 들어감.
+        });
+        */
+      );
+    },
+  ],
+};
+
+```
