@@ -1,0 +1,74 @@
+- 노션 출처 : https://www.notion.so/ionic-css-ae78be986a2646f1b06eef2661818528?pvs=4#dc67478144e9428a8bb5508794fbf85f
+
+- [트러블 슈팅] 지금, 이 `Ionic` 을 컨트롤 하지 못 하는 이유는 뭐지? 어디에서 영향을 받고 있는거지? `클릭했을 때, input 창에 밑줄이 그어지는 부분` 을 수정해야 한다. → 그러면, 이 부분에 영향을 주고 있는게 어디인지 보자.  ( #⭐⭐⭐⭐⭐ gpt 가 안내하는 길만 따라가면, ionic 과 같은 현상이 일어난다. 즉, `이 라이브러리가 어떠한 체계로 CSS 를 입히고 있는지`, CSS Variable, local CSS, shadow part 에 대한 이해 없이, 작업 했었고, 굳이 이해해야 하나, 라는 생각을 했었잖아. 반드시 먼저 파악해야 할 것은, `이 라이브러리`가 `CSS 체계`를 어떻게 잡고 있는가. 일반화 한다면, 이 REACT-HOOK-FORM 이 `FORM 이라는 웹 근본 기술` 을 어떻게 다루고 있는가. 어떠한 체계로 다루고 있는가, 라는 것.
+    
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/0a02f49b-4209-4072-858e-254b93636c88/Untitled.png)
+    
+    ```bash
+    개발자 도구에서 살펴보면, 
+    --highlight-color-focused 이 속성이다. 
+    
+    궁금한 건 
+    1) Textarea 마다, 별도의, 각자의, --highlight-color-focused 을 가질 수 있나? 
+    	- 공통적으로 변경하려면, 어떻게 해야 하는 거고, 각자 변경하려면 어떻게 해야 하는거지? 
+    	- 공통적으로 변경하려면, 글로벌 CSS 에서? 
+    	- 개별적으로 변경하려면, 각자의 CSS 에서? 
+    	
+    2) --ion-color-primary 는 어디에서 설정하는거지? 
+    	- 이건그냥, '전역 변수' 처럼 사용이 되겠네? 
+    ```
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/6b8b861c-e598-4462-bb83-0b2ab28faee9/Untitled.png)
+    
+    - [규칙] `--highlight-color-focused` 속성이 있는 `모든 태그` 를 변경하게 하려면 (# 아직, 시도 안 함)
+        
+        
+    - [규칙] 모든 `Textarea` 의 `--highlight-color-focused` 속성을 변경하게 하려면
+        - 참고 : https://ionicframework.com/docs/theming/css-variables#ionic-variables
+        - https://chatgpt.com/share/58ba1fda-e7d6-466e-8a07-e3aa417de24d
+        
+        ```bash
+        :root {
+          --highlight-color-focused: #0054e9;
+        }
+        
+        /* 글로벌 스타일에 적용 */textarea {
+          --highlight-color-focused: var(--highlight-color-focused);
+        }
+        ```
+        
+    - [규칙] 특정 `Textarea` 의  `--highlight-color-focused` 속성을 변경하게 하려면
+        
+        
+        ```bash
+        /* 각각의 컴포넌트 CSS 파일 */.custom-textarea-1 {
+          --highlight-color-focused: #ff0000;
+        }
+        
+        .custom-textarea-2 {
+          --highlight-color-focused: #00ff00;
+        }
+        ```
+        
+        ```bash
+        import React from 'react';
+        import { IonTextarea } from '@ionic/react';
+        import './main.css';
+        
+        function Example() {
+          return (
+            <>
+              <IonTextarea className="custom-textarea-1" placeholder="Textarea 1"></IonTextarea>
+              <IonTextarea className="custom-textarea-2" placeholder="Textarea 2"></IonTextarea>
+            </>
+          );
+        }
+        
+        export default Example;
+        ```
+        
+    
+    - [적용 예시] 해당 class 에서, `--highlight-color-focused : none` 속성을 이렇게 변경하면, focus 될 때 이상한 색상으로 변경되지 않을 수 있음.
+        
+        ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/b61d2340-370a-4ba3-a06a-496269a7baf2/Untitled.png)
