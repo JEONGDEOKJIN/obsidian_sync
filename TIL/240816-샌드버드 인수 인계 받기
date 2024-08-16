@@ -1,0 +1,319 @@
+### 로그인 처리
+
+```jsx
+트리거는 
+
+인증이 필요한 ‘페이지’ 로 이동했을 때! 
+
+secureRoute.tsx 
+
+에서 
+
+‘인증’ 이 필요한 경우, home 으로 보내야 함 
+
+login 으로 보내지마
+```
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/b703bf5d-ba03-408a-8622-70bd936da2e2/image.png)
+
+- switch
+    
+    이게 있어야 trap 이 동작함 
+    
+    ```jsx
+    나중에 이제 
+    Redirect to 가 바뀌게 된다 ⭐⭐⭐⭐⭐⭐⭐
+    
+    ```
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/d0d86b28-8776-4232-86df-a847eb95fb6e/image.png)
+    
+    ```jsx
+    리액트 라우터 돔 5 를 사용함 
+    그래서, 최신 8 과 다름 
+    아이오닉 > node module 아래 > v5 로 잡힘 -> 이때 널리 알려짐 패턴으로 구현하신 것 ⭐⭐⭐
+    ```
+    
+
+- 정리
+    
+    인증이 실패하면, 로그인이 아니라, ‘인증 필요한 페이지’ 로 보내면 됨 
+    
+    로그인 필요한거는 secure route ⭐⭐⭐⭐⭐⭐ 
+    
+    로그인 필요 없는 건 그냥 route 로 하면 됨 ⭐⭐⭐⭐⭐⭐ 
+    
+
+### supabase 활용해서 public 에 공개된 api 만든 예시 (#⭐⭐⭐ 멋지다. 이게 프론트에서 어디에서 주로 쓰이게 될까)
+
+https://github.com/shoveller/supabase_stock_price/blob/main/supabase/functions/stock_price/index.ts
+
+```jsx
+// Follow this setup guide to integrate the Deno language server with your editor:
+// https://deno.land/manual/getting_started/setup_your_environment
+// This enables autocomplete, go to definition, etc.
+
+// Setup type definitions for built-in Supabase Runtime APIs
+import "@supabase/functions-js"
+import { supabase } from '../_shared/client.ts'
+import _ from 'lodash'
+
+Deno.serve(async (req) => {
+  console.log(_.isEmpty(supabase))
+  const { symbol } = await req.json()
+  const data = {
+    [symbol]: `123.456`,
+  }
+
+  return new Response(
+    JSON.stringify(data),
+    { headers: { "Content-Type": "application/json" } },
+  )
+})
+
+/* To invoke locally:
+
+  1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
+  2. Make an HTTP request:
+
+  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/stock_price' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
+    --header 'Content-Type: application/json' \
+    --data '{"name":"Functions"}'
+
+*/
+```
+
+### 채팅 인수 인계
+
+- 샌드버드 채팅 인수인계
+    
+    
+    - 공식 문서 를 보고 작업
+    - 이걸 하니 ‘react ui kit’ 스토리북
+        - 이걸 보고 하면 좋음
+        
+        ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/4644c437-7131-436f-8566-73a1c32211d8/image.png)
+        
+    
+    - 상태관리가 복잡함
+        - 그래서, 예제 사이트를 보고
+        - 요구사항을 청취하고 → 수정 하는 식으로 진행 ⭐⭐⭐⭐⭐⭐⭐
+        
+        ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/de1594dc-d6bd-4723-8a4f-f86171d940f6/image.png)
+        
+    
+    - 샌드버드는 ‘다계층 컴포넌트’ ⭐⭐⭐⭐⭐⭐
+        - renderProps 패턴으로 넘기는 걸 추천 ❓❓❓❓❓❓❓❓❓
+            
+            ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/b93fbce1-3343-44b3-bbe3-77188ce2ca7c/image.png)
+            
+        
+    - 샌드버드 대시보드
+        - ex) 채팅이 안나와요~ 라고 하면
+            - 그룹채널이 보여야 → 정상적으로 작동
+            - 뺑뺑 돌면 > 바로 도움을 요청 ⭐⭐⭐
+                - 아래 부분이 정상적으로 돌아가야 함 ⭐⭐⭐⭐⭐
+        
+        ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/d1efc8fd-2d08-4847-85e2-7602f9c2f5d7/image.png)
+        
+- 샌드버드 봇 셋팅
+    
+    
+    ### 샌드버드 봇 셋팅
+    
+    1. 샌드버드 개미 스쿨로 들어간다.
+    2. 어드민 계정이 있는데 거기 어플리케이션이 있음. 거기로 들어간다. 
+    
+    - 봇 이름
+        - 온보딩봇
+        
+    - 웰컴 메시지에 컨텍스트 도움되는게 좋음 ⭐⭐⭐⭐⭐⭐⭐⭐
+        - 채널별로 봇을 따로 만드는 것도 가능하긴 한데
+            - 비용 문제
+        - welcome message 에 ‘종목’ 을 넣으면 → 테슬라 가 나오고, 이 종목으로 나오게 됨 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+            - 이 종목 기반으로 크롤링해! 라고도 시킬 수 있어
+        
+    - knowledge base
+        - 이거 기반으로 대답해! 라는 것
+            - 벡터 db - 임베딩 만들고 - 여기까지 주입 하는 건데
+                - 이거는 url, file 넣을 수 있음.
+        - 다만, 5번 만 됨 ⭐⭐⭐⭐⭐⭐⭐
+        - 이거를 하면 크롤링을 막 함
+            - 주식 관련 url 넣으면 크롤링 해
+    
+    - 만들고 나면
+        - `go to bot settings`
+    
+    - bot studio > knowledge source
+        - url 에 아카데미만 있는 상황에서
+            - ‘지옥카레’ 물어보면 - 없음
+        - select source 누르면 → knowledge center 에서 ‘추가’ 가 가능 ⭐⭐⭐⭐⭐⭐
+            - 이걸 하려면, `knowledge center` 에서 ‘등록’ 해놔야 → ‘추가’ 가 가능
+                - knoewdelge center 에서 add source 누르고 → `지옥 카레 레시피` 를 추가
+                - 그럼, knowledge center 에 등록
+                - 이때, 5개 밖에 안 됨
+        - bot stuio > 챗봇 선택 > knowledge 소스 → select source 누름 → 소스 선택
+            - 그러면, ‘지옥 카레’ 를 기반으로, ‘아는 것 처럼’ 이야기 함.
+        - 정적 데이터는 이렇게 넣는다.
+            
+            
+    - 동적인 데이터는 ‘function calls’ 로 넣는다.
+        - create → automatic detection by AI
+            - 그 채팅방에서, 그 맥락 파악을 AI 가 함
+        - MANUAL ACTIVATION 은 ‘전통적인 봇’ 이 함 ⭐⭐⭐
+        - function name
+            - gpt 가 알아들을 수 있는 함수이름을 적으면 됨
+            - ex) stock_price : 그러면, 일반인 알아들을 수 있음.
+        - function key
+            - 맥락을 길게 주면, 이 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ 걸 잘  호출할 수 있을 것
+        - trigger prompt
+            - ‘백엔드 함수를 호출할 때, 대화의 맥락’
+                - ‘유저가 주가를 궁금해 할 때’ → ‘stock price’
+                    - 테스트를 하고 - 등급 나누면 - 개인화된 퀴즈가 나오는거 아닌가⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+                - 주가를 가져오지 못 했을 때 둘러대는 말 (fallback)
+        - header
+        - method ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+            - 이게 public api 에 노출된거 여야 함 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+            - lambda function 으로 만든게 있고 - supabase 에 호스팅 해둔 상태
+            - 우리는 java end point 일 것
+            - 대화의 맥락 파악 → gpt 가 price 함수 호출 → 주식의 symbol 을 gpt 가 넣어주면 → ( ) 처리를(백엔드 개발자가 만든) 하고 → return 받음
+            - request body
+                - parameter type : dynamic
+                - key : symbol
+                    - 이 부분을 백엔드 개발자랑 소통 해야 함 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+                    - stock_name 을 만들면, 이렇게 해야
+                - type : string
+                - prompt
+                    - key 를 설명하는 걸 ‘영어’ 로 작성
+                    - 그러면 `<dynamic string>` 부분에 `gpt` 가 값을 채운다 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+                - test value
+                    - 삼성으로 넣으면 → gpt 가 symbol 의 값을 바꿔서 → 전달함
+            
+            - 팔 하나 만든거고 이제 붙이기
+                - 봇 선택 → select function → 방금 만든 함수 선택
+                - 채팅에서, 테슬라 주가 물어보면, 해당 함수가 호출되어서, 진행이 됨
+                    - 이 TSLA 를 트레이딩 뷰에 넣으면 → 해당 값이 나오는 것 임
+            
+            - 요구 사항
+                - 이미지 같은 것도 되는지?
+            
+            - WORKFLOW ⭐⭐⭐⭐⭐
+                - 이건, agent 가 되는 길
+            
+            - 추가로
+                - ⭐⭐⭐⭐⭐⭐⭐ 사용자가 질문했을 때 → 해당 방에 대한 맥락을 바탕으로 질문하게 할 수도 있음.
+                - 백엔드에서 차트 이미지를 return 하면, 그걸 내려보낸다?
+            
+            - TO DO
+                - 이미지 까지 볼 수 있나?
+            
+            - 여기에서 제일 밑에 맞춤 응답
+                - https://sendbird.com/docs/ai-chatbot/guide/v1/sendbird-dashboard/function-calls
+            
+            - storybook 안에서 group channel 안에서
+                - props 으로 뭘 넘겨주면, 채팅 ui 커스텀이 가능
+                - render Message 커스텀
+                    
+                    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/cc8db83e-4f95-40a0-9b0f-80acf229a274/image.png)
+                    
+            
+            - 이거는 header 에서 create 못 하게 만든거
+                - 이거는 render 속성 없애는거
+                
+                ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/f6b44143-988a-4ccf-8c27-55a75ee4a5a1/image.png)
+                
+            
+            - CHAT > ui kit config ⭐⭐⭐⭐⭐⭐⭐⭐
+                - 여기에서 잘 돌아가는지 봐야 함 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+                - 빙빙 돌아가는거
+                - 샌드버드 어드민에서 우선, 잘 되게 여기에서 테스트 해보면 돼 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+            
+            - 이렇게 하면, 에디터 창이 나옴
+            
+            ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/17eaa9c4-d091-43cf-87aa-e4f1bd7daab6/image.png)
+            
+            - 오버라이드 한 쪽은 이곳
+                - 커스텀 하려면, 이곳을 ‘참고만!’ 하고
+                - 넣으려면 , render function 거기로 넣어야 함
+            
+            ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/1754352e-927b-47ad-b3cb-1a45b41134dc/image.png)
+            
+            ```jsx
+            보면, 여기가 '바닥' 임
+            ```
+            
+            ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/9fd9f7fc-c0ac-4f3b-8405-286a9cb1e094/image.png)
+            
+            여기를 어떻게 알아채셨지? 
+            
+            sendbird 프로젝트에서 package 에 markdown parser 가 있나 ? 
+            
+            ```jsx
+            이게, 파서를 갖고 있는거 같음 
+            ```
+            
+            ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/0cae17fc-ff5c-424e-96d6-f2bfc4d7beb4/da5a0ee8-4057-402b-ac2f-14afc090a9d6/image.png)
+            
+            template-view 로 끝나는게 core 같음 
+            
+            그런데, 이 패키지는 공개가 아직 안 된 듯 
+            
+            대안은 
+            
+            html 형식으로 render 해줘!!!!! 라고 gpt 한테 던져주면, 대안이 될 수 있을 듯 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ 
+            
+            ---
+            
+            ### user에 추가 해야, 넣을 때 리스트가 뜸
+            
+            설정 - user - new
+            
+            moderation 탭 - group - 여기에 add 
+            
+            - `group 채팅` 이 아니라 `open 채팅` 으로 바뀌어야 함
+                - 
+            
+            ---
+            
+            ### 로그아웃 테스트 할 때
+            
+            refresh 랑 token 을 로컬 스토리지에서 없애고 → 없으니까 → login 으로 감 
+            
+            ---
+            
+            ### 크롤링 아키텍처
+            
+            - `사용자 트리거`
+                - 사용자가, ‘특정 구문 입력’ 했을 때 → GPT 가 크롤링 함수를 호출 할 수도
+                
+                 
+                
+            - `어드민 트리거`
+                - 특정 시간에 동작하게 하는? ❓❓❓❓❓❓
+            
+        
+    
+
+### 오픈 채팅 끌어오는 거 진행
+
+### SDK 끌어오는거 하는 중
+
+GroupChannelModule 여기 타입 확인 
+
+PROVIDER 쓰는 쪽이 빠를 것 임 
+
+강의 같은 건, 없고, 소스 코드 까보고, 들어가 봐야 함
+
+### 정리
+
+- 샌드버드 내에서 ai rag 진행 ⭐⭐⭐⭐⭐
+- 크롤링은 기계가 시그널 보내는건 기술적으로 힘들 수 있고, 사람이 글을 써서 보내는 쪽으로 진행하면?
+    - 그러면, 백엔드에 함수만 잘 넘겨주면 됨
+- 그림 나오게 하는 건, 이쪽에 파고들어가면 될 듯
+    
+    ```jsx
+    위젯 커스터마이즈 포인트로 추정되는 곳입니다.
+    대표님과의 대화에 필요한 컨텍스트이니 신경쓰지 않으셔도 되겠습니다.
+    src/ui/MessageContent
+    ```
